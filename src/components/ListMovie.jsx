@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import http from "../api/api";
+import { NavLink } from "react-router";
 
 export default function ListMovie() {
     const [isLoading, setLoading] = useState(false)
@@ -66,6 +67,7 @@ export default function ListMovie() {
                                 <td>{item.director}</td>
                                 <td>{item.release_year}</td>
                                 <td>
+                                    <NavLink to={`/edit-movie/${item.id}`}>Edit</NavLink>
                                     <button onClick={() => handleDeleteMovie(item.id)}>
                                         Hapus
                                     </button>

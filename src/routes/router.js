@@ -21,6 +21,16 @@ const router = createBrowserRouter([
             }
         },
     },
+    {
+        path : "/edit-movie/:id",//menambahkan parameter untuk esit-movie
+        lazy : {
+            Component : async () => {
+                const component = await import("../pages/EditMovie.jsx")
+
+                return component.default
+            }
+        },
+    },
 ])
 
 export default router

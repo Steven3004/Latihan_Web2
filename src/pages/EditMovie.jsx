@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import http from "../api/api"
-import { useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
 
 export default function AddNewMovie() {
     const navigate = useNavigate()
+
+    const params = useParams()
 
     const [isLoading, setLoading] = useState(false)
 
@@ -22,16 +24,38 @@ export default function AddNewMovie() {
             })
     }
 
+    const fetchMovie = async () => {
+        try {
+            setLoading(true)
+
+            const response = await http.get(`/movies/${params.id}`)
+
+            if(response.status == 200) {
+                const {data} = response.data
+
+                setForm({
+                    title : data.title,
+                    director : data.director,
+                    release_year : data.release_year
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const onSubmit = async (event) => {
         event.preventDefault()
         try {
             setLoading(true)
 
-            const response = await http.post("/movies",form)
+            const response = await http.put(`/movies/${params.id}`,form)
 
             console.log(response);
 
-            if(response.status == 201) {
+            if(response.status == 200) {
                 navigate("/", {
                     replace : true
                 })
@@ -43,10 +67,14 @@ export default function AddNewMovie() {
         }
     }
 
+    useEffect(() => {
+        fetchMovie()
+    }, [params.id])
+
     return (
         <div>
 
-        <h1>Add New movie</h1>
+        <h1>Edit Movie</h1>
         <form onSubmit={onSubmit}>
         <div>
             <label>Title : </label>
