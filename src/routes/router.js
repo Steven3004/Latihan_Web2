@@ -10,7 +10,17 @@ const router = createBrowserRouter([
                 return component.default
             }
         },
-    }
+    },
+    {
+        path : "/add-movie",
+        lazy : {
+            Component : async () => {
+                const component = await import("../pages/AddNewMovie.jsx")
+
+                return component.default
+            }
+        },
+    },
 ])
 
 export default router

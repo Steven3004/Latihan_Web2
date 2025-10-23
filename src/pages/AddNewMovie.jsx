@@ -1,7 +1,10 @@
 import { useState } from "react"
 import http from "../api/api"
+import { useNavigate } from "react-router"
 
 export default function AddNewMovie() {
+    const navigate = useNavigate()
+
     const [isLoading, setLoading] = useState(false)
 
     const [form, setForm] = useState({
@@ -27,6 +30,12 @@ export default function AddNewMovie() {
             const response = await http.post("/movies",form)
 
             console.log(response);
+
+            if(response.status == 201) {
+                navigate("/", {
+                    replace : true
+                })
+            }
         } catch (error) {
             console.error(error);
         } finally {
