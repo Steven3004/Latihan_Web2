@@ -5,6 +5,9 @@ export default function ListMovie() {
     const [isLoading, setLoading] = useState(false)
     const [movies, setmovies] = useState([])
 
+
+
+
     const fetchMovies = useCallback(async() => {
         try {
             setLoading(true)
@@ -22,9 +25,23 @@ export default function ListMovie() {
         }
     }, [])
 
+    const handleDeleteMovie = async (id) => {
+        try {
+            const response = await http.delete(`/movies/${id}`)
+            console.log(response);
+
+            if(response.status == 200) {
+                fetchMovies()
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         fetchMovies()
     }, [fetchMovies])
+
 
     return (
         <div>
@@ -37,6 +54,7 @@ export default function ListMovie() {
                         <th>Judul</th>
                         <th>Director</th>
                         <th>Public Year</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,11 +65,14 @@ export default function ListMovie() {
                                 <td>{item.title}</td>
                                 <td>{item.director}</td>
                                 <td>{item.release_year}</td>
-                                
-
+                                <td>
+                                    <button onClick={() => handleDeleteMovie(item.id)}>
+                                        Hapus
+                                    </button>
+                                </td>
                             </tr>
                     })
-                    }
+                  }
                     
                 </tbody>
             </table>
